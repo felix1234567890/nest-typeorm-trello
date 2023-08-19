@@ -18,7 +18,7 @@ import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UserDecorator } from './user.decorator';
 import { User } from './user.entity';
-import { response } from 'express';
+import { Response } from 'express';
 
 @ApiTags('users')
 @Controller('auth')
@@ -64,10 +64,13 @@ export class AuthController {
   }
   @Delete()
   @UseGuards(AuthGuard())
-  async deleteUser(@UserDecorator() user: User, @Res() response) {
+  async deleteUser(
+    @UserDecorator() user: User,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     try {
       await this.authService.deleteUser(user);
-      response.json({ message: 'User deleted successfully' });
+      return response.json({ message: 'User deleted successfully' });
     } catch (error) {
       throw new Error(error);
     }

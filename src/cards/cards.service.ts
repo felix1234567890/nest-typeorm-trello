@@ -6,20 +6,21 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CardRepository } from './card.repository';
 import { Card } from './card.entity';
 import { NotFoundByIdException } from 'src/exceptions/NotFoundByIdException.exception';
 import { CreateCardDTO, UpdateCardDTO } from './card.dto';
 import { User } from 'src/auth/user.entity';
-import { SectionRepository } from 'src/sections/section.repository';
+import { CardRepository } from './cards.module';
+import { Section } from 'src/sections/section.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CardsService {
   constructor(
-    @InjectRepository(CardRepository)
+    @InjectRepository(Card)
     private readonly cardRepository: CardRepository,
-    @InjectRepository(SectionRepository)
-    private readonly sectionRepository: SectionRepository,
+    @InjectRepository(Section)
+    private readonly sectionRepository: Repository<Section>,
   ) {}
   async findAllCards(): Promise<Card[]> {
     try {
@@ -47,14 +48,16 @@ export class CardsService {
     }
   }
   async findOne(id: number): Promise<Card> {
-    const card = await this.cardRepository.findOne(id, {
+    const card = await this.cardRepository.findOne({
+      where: { id },
       relations: ['section'],
     });
     if (!card) throw new NotFoundByIdException('Card');
     return card;
   }
   async create(sectionId: number, data: CreateCardDTO, user: User) {
-    const section = await this.sectionRepository.findOne(sectionId, {
+    const section = await this.sectionRepository.findOne({
+      where: { id: sectionId },
       relations: ['users'],
     });
     if (!section)
@@ -65,7 +68,7 @@ export class CardsService {
       throw new UnauthorizedException(
         "You cannot create card for section you don't own",
       );
-    const usersList = section.users.filter(usr => usr.id === user.id);
+    const usersList = section.users.filter((usr) => usr.id === user.id);
     if (usersList.length === 0)
       throw new UnauthorizedException(
         "You cannot create card for section you don't own",
@@ -83,11 +86,13 @@ export class CardsService {
     data: UpdateCardDTO,
     user: User,
   ) {
-    const card = await this.cardRepository.findOne(cardId, {
+    const card = await this.cardRepository.findOne({
+      where: { id: cardId },
       relations: ['section'],
     });
     if (!card) throw new NotFoundByIdException('Card');
-    const section = await this.sectionRepository.findOne(sectionId, {
+    const section = await this.sectionRepository.findOne({
+      where: { id: sectionId },
       relations: ['users'],
     });
     if (!section) throw new NotFoundByIdException('Section');
@@ -99,7 +104,7 @@ export class CardsService {
       throw new BadRequestException(
         'You cannot change card that belongs to given section',
       );
-    const usersList = section.users.filter(usr => usr.id === user.id);
+    const usersList = section.users.filter((usr) => usr.id === user.id);
     if (usersList.length === 0)
       throw new UnauthorizedException(
         "You canno't change card for section that you don't own",
@@ -114,11 +119,13 @@ export class CardsService {
     return updatedSection;
   }
   async remove(sectionId: number, cardId: number, user: User): Promise<void> {
-    const card = await this.cardRepository.findOne(cardId, {
+    const card = await this.cardRepository.findOne({
+      where: { id: cardId },
       relations: ['section'],
     });
     if (!card) throw new NotFoundByIdException('Card');
-    const section = await this.sectionRepository.findOne(sectionId, {
+    const section = await this.sectionRepository.findOne({
+      where: { id: sectionId },
       relations: ['users'],
     });
     if (!section) throw new NotFoundByIdException('Section');
@@ -130,7 +137,7 @@ export class CardsService {
       throw new BadRequestException(
         'You can not delete card that belongs to given section',
       );
-    const usersList = section.users.filter(usr => usr.id === user.id);
+    const usersList = section.users.filter((usr) => usr.id === user.id);
     if (usersList.length === 0)
       throw new UnauthorizedException(
         "You can not delete card for section that you don't own",

@@ -1,21 +1,23 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from './user.repository';
 import { LoginUserDTO, CreateUserDTO, UpdateUserDTO } from './user.dto';
-import { NotFoundByIdException } from 'src/exceptions/NotFoundByIdException.exception';
-import * as bcrypt from 'bcryptjs';
+import { NotFoundByIdException } from '../exceptions/NotFoundByIdException.exception';
+import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
   async loginUser(data: LoginUserDTO) {
-    const user = await this.userRepository.findOne({ email: data.email });
+    const user = await this.userRepository.findOne({
+      where: { email: data.email },
+    });
     if (!user) throw new NotFoundByIdException('User');
     const match = await bcrypt.compare(data.password, user.password);
     const payload = { user: user.id };
@@ -26,7 +28,7 @@ export class AuthService {
   }
   async createUser(data: CreateUserDTO) {
     try {
-      const newUser = await this.userRepository.create(data);
+      const newUser = this.userRepository.create(data);
       return await this.userRepository.save(newUser);
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY')
@@ -37,8 +39,8 @@ export class AuthService {
   async getAllUsers() {
     return await this.userRepository.find();
   }
-  async getUserById(id) {
-    return await this.userRepository.findOne(id);
+  async getUserById(id: number) {
+    return await this.userRepository.findOne({ where: { id } });
   }
   async updateUser(user: User, data: UpdateUserDTO) {
     const { username, password, email } = data;

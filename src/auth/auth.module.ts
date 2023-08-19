@@ -4,10 +4,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { UserRepository } from './user.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { DataSource } from 'typeorm';
+import { User } from './user.entity';
+import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 
+const userRepository = {
+  provide: getRepositoryToken(User),
+  useFactory: (dataSource: DataSource) => dataSource.getRepository(User),
+  inject: [getDataSourceToken()],
+};
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,9 +27,9 @@ import { ConfigModule } from '@nestjs/config';
         expiresIn: '1h',
       },
     }),
-    TypeOrmModule.forFeature([UserRepository]),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, userRepository],
   controllers: [AuthController],
+  exports: [userRepository],
 })
 export class AuthModule {}

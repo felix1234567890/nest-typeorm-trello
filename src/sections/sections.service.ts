@@ -9,18 +9,18 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Section } from './section.entity';
 import { CreateSectionDTO, UpdateSectionDTO } from './section.dto';
-import { SectionRepository } from './section.repository';
 import { NotFoundByIdException } from 'src/exceptions/NotFoundByIdException.exception';
-import { UserRepository } from 'src/auth/user.repository';
 import { User } from 'src/auth/user.entity';
+import { Repository } from 'typeorm';
+import { SectionRepository } from './sections.module';
 
 @Injectable()
 export class SectionsService {
   constructor(
-    @InjectRepository(SectionRepository)
+    @InjectRepository(Section)
     private sectionRepository: SectionRepository,
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
   async findAllWithLimit(limit: number): Promise<Section[]> {
     try {
@@ -41,7 +41,8 @@ export class SectionsService {
     return await this.sectionRepository.find({ relations: ['users', 'cards'] });
   }
   async findOne(id: number): Promise<Section> {
-    const section = await this.sectionRepository.findOne(id, {
+    const section = await this.sectionRepository.findOne({
+      where:{id},
       relations: ['users', 'cards'],
     });
     if (!section)
@@ -58,7 +59,8 @@ export class SectionsService {
     await this.userRepository.save(users);
   }
   async update(id: number, data: UpdateSectionDTO, user: User) {
-    const section = await this.sectionRepository.findOne(id, {
+    const section = await this.sectionRepository.findOne({
+      where:{id},
       relations: ['users', 'cards'],
     });
     if (!section) throw new NotFoundByIdException('Section');
@@ -84,7 +86,8 @@ export class SectionsService {
     return updatedSection;
   }
   async remove(id: number, user: User): Promise<void> {
-    const section = await this.sectionRepository.findOne(id, {
+    const section = await this.sectionRepository.findOne({
+      where:{id},
       relations: ['users', 'cards'],
     });
     if (!section) throw new NotFoundByIdException('Section');
@@ -120,7 +123,8 @@ export class SectionsService {
     return await this.sectionRepository.search('sections', term);
   }
   async assign(id: number, user: User) {
-    const section = await this.sectionRepository.findOne(id, {
+    const section = await this.sectionRepository.findOne({
+      where: {id},
       relations: ['users', 'cards'],
     });
     section.users.forEach(usr => {

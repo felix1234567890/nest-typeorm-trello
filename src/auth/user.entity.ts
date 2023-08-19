@@ -9,7 +9,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { Section } from 'src/sections/section.entity';
-import * as bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 
 @Entity('users')
