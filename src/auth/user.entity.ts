@@ -8,7 +8,7 @@ import {
   JoinTable,
   BeforeInsert,
 } from 'typeorm';
-import { Section } from 'src/sections/section.entity';
+import { Section } from '../sections/section.entity';
 import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 
