@@ -9,7 +9,7 @@ import { DataSource } from 'typeorm';
 import { User } from './user.entity';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 
-const userRepository = {
+export const userRepository = {
   provide: getRepositoryToken(User),
   useFactory: (dataSource: DataSource) => dataSource.getRepository(User),
   inject: [getDataSourceToken()],
@@ -28,7 +28,9 @@ const userRepository = {
       },
     }),
   ],
-  providers: [AuthService, JwtStrategy, userRepository],
+  providers: [AuthService, JwtStrategy, 
+    userRepository
+  ],
   controllers: [AuthController],
   exports: [userRepository],
 })
