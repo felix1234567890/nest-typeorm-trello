@@ -1,25 +1,25 @@
 import {
+  Body,
   Controller,
-  Get,
-  Param,
-  Post,
-  HttpCode,
   Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
   Put,
   Query,
-  ParseIntPipe,
-  ValidationPipe,
-  Body,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiBody } from '@nestjs/swagger';
-import { CardsService } from './cards.service';
-import { PaginationDTO } from 'src/sections/section.dto';
-import { Card } from './card.entity';
-import { CreateCardDTO, UpdateCardDTO } from './card.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { UserDecorator } from 'src/auth/user.decorator';
 import { User } from 'src/auth/user.entity';
+import { PaginationDTO } from 'src/sections/section.dto';
+import { CreateCardDTO, UpdateCardDTO } from './card.dto';
+import { Card } from './card.entity';
+import { CardsService } from './cards.service';
 
 @Controller('cards')
 @ApiTags('Cards')

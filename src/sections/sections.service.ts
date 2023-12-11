@@ -1,17 +1,17 @@
 import {
-  Injectable,
-  NotFoundException,
+  BadRequestException,
   HttpException,
   HttpStatus,
+  Injectable,
+  NotFoundException,
   UnauthorizedException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Section } from './section.entity';
-import { CreateSectionDTO, UpdateSectionDTO } from './section.dto';
-import { NotFoundByIdException } from 'src/exceptions/NotFoundByIdException.exception';
-import { User } from 'src/auth/user.entity';
 import { Repository } from 'typeorm';
+import { User } from '../auth/user.entity';
+import { NotFoundByIdException } from '../exceptions/NotFoundByIdException.exception';
+import { CreateSectionDTO, UpdateSectionDTO } from './section.dto';
+import { Section } from './section.entity';
 import { SectionRepository } from './sections.module';
 
 @Injectable()

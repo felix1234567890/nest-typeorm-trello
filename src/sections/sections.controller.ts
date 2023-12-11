@@ -1,35 +1,35 @@
 import {
-  Controller,
-  Get,
-  Param,
-  Post,
   Body,
-  Put,
+  Controller,
   Delete,
-  Query,
-  ValidationPipe,
+  Get,
   HttpCode,
-  UseGuards,
+  Param,
   ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { SectionsService } from './sections.service';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreateSectionDTO,
-  UpdateSectionDTO,
   PaginationDTO,
+  UpdateSectionDTO,
 } from './section.dto';
-import {
-  ApiBody,
-  ApiTags,
-  ApiQuery,
-  ApiCreatedResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { SectionsService } from './sections.service';
 
-import { Section } from './section.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserDecorator } from 'src/auth/user.decorator';
 import { User } from 'src/auth/user.entity';
+import { Section } from './section.entity';
 
 @ApiTags('Sections')
 @ApiBearerAuth()

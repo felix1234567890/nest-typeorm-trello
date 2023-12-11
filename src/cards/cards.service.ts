@@ -1,18 +1,18 @@
 import {
-  Injectable,
+  BadRequestException,
   HttpException,
   HttpStatus,
-  BadRequestException,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Card } from './card.entity';
-import { NotFoundByIdException } from 'src/exceptions/NotFoundByIdException.exception';
-import { CreateCardDTO, UpdateCardDTO } from './card.dto';
 import { User } from 'src/auth/user.entity';
-import { CardRepository } from './cards.module';
+import { NotFoundByIdException } from 'src/exceptions/NotFoundByIdException.exception';
 import { Section } from 'src/sections/section.entity';
 import { Repository } from 'typeorm';
+import { CreateCardDTO, UpdateCardDTO } from './card.dto';
+import { Card } from './card.entity';
+import { CardRepository } from './cards.module';
 
 @Injectable()
 export class CardsService {

@@ -1,11 +1,11 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { LoginUserDTO, CreateUserDTO, UpdateUserDTO } from './user.dto';
-import { NotFoundByIdException } from '../exceptions/NotFoundByIdException.exception';
-import bcrypt from 'bcryptjs';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './user.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import bcrypt from 'bcryptjs';
+import { Repository } from 'typeorm';
+import { NotFoundByIdException } from '../exceptions/NotFoundByIdException.exception';
+import { CreateUserDTO, LoginUserDTO, UpdateUserDTO } from './user.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {

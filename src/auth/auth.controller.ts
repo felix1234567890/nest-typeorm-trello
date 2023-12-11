@@ -1,24 +1,24 @@
 import {
-  Controller,
-  Post,
   Body,
-  ValidationPipe,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
   Get,
+  HttpCode,
+  Post,
+  Put,
+  Res,
   UseGuards,
   UseInterceptors,
-  ClassSerializerInterceptor,
-  Put,
-  HttpCode,
-  Delete,
-  Res,
+  ValidationPipe,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDTO, LoginUserDTO, UpdateUserDTO } from './user.dto';
-import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { UserDecorator } from './user.decorator';
-import { User } from './user.entity';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { AuthService } from './auth.service';
+import { UserDecorator } from './user.decorator';
+import { CreateUserDTO, LoginUserDTO, UpdateUserDTO } from './user.dto';
+import { User } from './user.entity';
 
 @ApiTags('users')
 @Controller('auth')
