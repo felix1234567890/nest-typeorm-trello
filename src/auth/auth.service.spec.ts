@@ -1,33 +1,33 @@
-import { TestBed } from '@automock/jest';
+import { jest } from '@jest/globals';
 import { JwtService } from '@nestjs/jwt';
+import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AuthService } from './auth.service';
-import { User } from './user.entity';
+import { AuthService } from './auth.service.ts';
+import { User } from './user.entity.ts';
 
 describe('AuthService', () => {
 	let authService: AuthService;
-	let userRepository: jest.Mocked<Repository<User>>;
-	let jwtService: jest.Mocked<JwtService>;
+	const userRepository = {
+		find: jest.fn<(...args: any[]) => Promise<any>>().mockResolvedValue([
+			{
+				id: 1,
+				username: 'frane',
+				email: 'frane@frane.com',
+				password: 'password',
+			},
+		]),
+	};
 
-	beforeAll(() => {
-		const { unit, unitRef } = TestBed.create(AuthService)
-			.mock(getRepositoryToken(User) as string)
-			.using({
-				find: jest.fn().mockResolvedValue([
-					{
-						id: 1,
-						username: 'frane',
-						email: 'frane@frane.com',
-						password: 'password',
-					},
-				] as User[]),
-			})
-			.compile();
+	beforeAll(async () => {
+		const moduleRef = await Test.createTestingModule({
+			providers: [
+				AuthService,
+				{ provide: getRepositoryToken(User), useValue: userRepository },
+				{ provide: JwtService, useValue: {} },
+			],
+		}).compile();
 
-		authService = unit;
-		userRepository = unitRef.get(getRepositoryToken(User) as string);
-		jwtService = unitRef.get(JwtService);
+		authService = moduleRef.get(AuthService);
 	});
 	it('should retrieve users from the database', async () => {
 		const users = await authService.getAllUsers();

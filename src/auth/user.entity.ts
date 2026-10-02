@@ -10,7 +10,7 @@ import {
 	PrimaryGeneratedColumn,
 	Unique,
 } from 'typeorm';
-import { Section } from '../sections/section.entity';
+import { Section } from '../sections/section.entity.ts';
 
 @Entity('users')
 @Unique(['email'])

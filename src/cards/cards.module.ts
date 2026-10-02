@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
-import { SectionsModule } from 'src/sections/sections.module';
 import { DataSource, Repository } from 'typeorm';
-import { Card } from './card.entity';
-import { CardsController } from './cards.controller';
-import { CardsService } from './cards.service';
+import { SectionsModule } from '../sections/sections.module.ts';
+import { Card } from './card.entity.ts';
+import { CardsController } from './cards.controller.ts';
+import { CardsService } from './cards.service.ts';
 
 export interface CardRepository extends Repository<Card> {
 	this: Repository<Card>;
@@ -24,7 +24,7 @@ const cardRepository = {
 			},
 			async search(term: string) {
 				return this.createQueryBuilder('card')
-					.andWhere(`card.title LIKE :term`, { term: `%${term}%` })
+					.andWhere('card.title LIKE :term', { term: `%${term}%` })
 					.leftJoinAndSelect('card.section', 'section')
 					.getMany();
 			},

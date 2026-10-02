@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
-import { AuthModule } from 'src/auth/auth.module';
 import { DataSource, Repository } from 'typeorm';
-import { Section } from './section.entity';
-import { SectionsController } from './sections.controller';
-import { SectionsService } from './sections.service';
+import { AuthModule } from '../auth/auth.module.ts';
+import { Section } from './section.entity.ts';
+import { SectionsController } from './sections.controller.ts';
+import { SectionsService } from './sections.service.ts';
 
 export interface SectionRepository extends Repository<Section> {
 	this: Repository<Section>;

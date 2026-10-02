@@ -1,5 +1,13 @@
-import { Section } from 'src/sections/section.entity';
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	BaseEntity,
+	Column,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+	type Relation,
+} from 'typeorm';
+import { Section } from '../sections/section.entity.ts';
 
 @Entity('cards')
 export class Card extends BaseEntity {
@@ -18,8 +26,8 @@ export class Card extends BaseEntity {
 	@ManyToOne(
 		(type) => Section,
 		(section) => section.cards,
-		{ eager: false, cascade: true, onDelete: 'CASCADE' },
+		{ eager: false, onDelete: 'CASCADE' },
 	)
 	@JoinColumn({ name: 'section_id' })
-	section: Section;
+	section: Relation<Section>;
 }
