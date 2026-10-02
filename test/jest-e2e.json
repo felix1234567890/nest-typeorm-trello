@@ -4,9 +4,25 @@
 	"testEnvironment": "node",
 	"testRegex": ".e2e-spec.ts$",
 	"transform": {
-		"^.+\\.(t|j)s$": "ts-jest"
+		"^.+\\.ts$": [
+			"@swc/jest",
+			{
+				"jsc": {
+					"parser": {
+						"syntax": "typescript",
+						"decorators": true
+					},
+					"transform": {
+						"legacyDecorator": true,
+						"decoratorMetadata": true
+					},
+					"target": "es2022"
+				},
+				"module": {
+					"type": "es6"
+				}
+			}
+		]
 	},
-	"moduleNameMapper": {
-		"src/(.*)": "<rootDir>/src/$1"
-	}
+	"extensionsToTreatAsEsm": [".ts"]
 }

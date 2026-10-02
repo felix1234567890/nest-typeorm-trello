@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { User } from './auth/user.entity';
-import { Card } from './cards/card.entity';
-import { CardsModule } from './cards/cards.module';
-import { Section } from './sections/section.entity';
-import { SectionsModule } from './sections/sections.module';
+import { AuthModule } from './auth/auth.module.ts';
+import { User } from './auth/user.entity.ts';
+import { Card } from './cards/card.entity.ts';
+import { CardsModule } from './cards/cards.module.ts';
+import { Section } from './sections/section.entity.ts';
+import { SectionsModule } from './sections/sections.module.ts';
 
 const typeOrmConfig: TypeOrmModuleOptions = {
 	type: 'mysql',

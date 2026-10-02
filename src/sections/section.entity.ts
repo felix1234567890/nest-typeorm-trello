@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/auth/user.entity';
-import { Card } from 'src/cards/card.entity';
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../auth/user.entity.ts';
+import { Card } from '../cards/card.entity.ts';
 
 @Entity('sections')
 export class Section extends BaseEntity {

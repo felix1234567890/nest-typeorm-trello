@@ -1,9 +1,10 @@
+import { jest } from '@jest/globals';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AuthModule } from 'src/auth/auth.module';
-import { User } from 'src/auth/user.entity';
 import request from 'supertest';
+import { AuthModule } from '../src/auth/auth.module.ts';
+import { User } from '../src/auth/user.entity.ts';
 
 describe('Auth (e2e)', () => {
 	let app: INestApplication;
@@ -13,8 +14,10 @@ describe('Auth (e2e)', () => {
 		})
 			.overrideProvider(getRepositoryToken(User))
 			.useValue({
-				create: jest.fn().mockResolvedValue({ username: 'fr' }),
-				save: jest.fn().mockResolvedValue({ username: 'fr' } as User),
+				create: jest.fn<(...args: any[]) => Promise<any>>().mockResolvedValue({ username: 'fr' }),
+				save: jest
+					.fn<(...args: any[]) => Promise<any>>()
+					.mockResolvedValue({ username: 'fr' } as User),
 			})
 			.compile();
 
